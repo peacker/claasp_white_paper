@@ -21,7 +21,7 @@ setup( \n\
 )' > /CASCADA/setup.py
 RUN sudo apt update && sudo apt install -y ruby-full && apt-get install -y task-spooler
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-RUN export PATH=$PATH:$HOME/.cargo/env && cd / && git clone https://gitlab.limos.fr/iia_lulibral/tagada.git && cd tagada/rust && /root/.cargo/bin/cargo build --release && cd /tagada && gem install bundler #&& bundle install
+RUN export PATH=$PATH:$HOME/.cargo/env && cd / && git clone https://gitlab.limos.fr/iia_lulibral/tagada.git && cd tagada && git checkout 1.0 && cd rust && /root/.cargo/bin/cargo build --release && cd /tagada && gem install bundler #&& bundle install
 RUN export PATH=$PATH:$HOME/.cargo/env && cd / && git clone https://gitlab.limos.fr/frdelobe/tagada_abstractor.git && cd tagada_abstractor && /root/.cargo/bin/cargo build --release
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan gitlab.limos.fr >> ~/.ssh/known_hosts #&& cd /tagada && bundle install
 RUN sed -i 's/git\@/https:\/\//' /tagada/Gemfile
@@ -39,10 +39,15 @@ RUN cd /tagada && pip3 install --pre -r requirements.txt
 
 
 
-
+RUN gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 RUN cd /CASCADA && python3.10 setup.py install
 RUN apt install -y cm-super
 RUN apt install -y vim && apt install -y dvipng
+
+RUN apt-get install -y software-properties-common
+RUN apt-add-repository -y ppa:rael-gc/rvm
+RUN apt-get update
+RUN apt-get install -y rvm
 
 WORKDIR "/home/sage/docker_claasp_white_paper_experiments"
 CMD ["/bin/bash"]
