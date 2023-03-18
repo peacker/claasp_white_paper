@@ -1,4 +1,4 @@
-FROM sagemath
+FROM claasp
 RUN pip install cython sympy bidict cffi wurlitzer pysmt
 RUN pysmt-install --msat --confirm-agreement
 RUN mkdir -p /home/sage/docker_claasp_white_paper_experiments
