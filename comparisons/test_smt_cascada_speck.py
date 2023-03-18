@@ -43,7 +43,7 @@ if __name__ == '__main__':
         speck.SpeckInstance.speck_64_96,
         speck.SpeckInstance.speck_64_128
     ]
-    solver_name = "yices"
+    solver_name = "msat"
     rounds = list(range(4, 5))
     pool = Pool()
     results = []

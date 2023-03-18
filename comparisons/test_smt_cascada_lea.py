@@ -38,11 +38,12 @@ if __name__ == '__main__':
     lea_primitives = [
         lea.LEACipher,
     ]
-    solver_name = "z3"
-    rounds = list(range(1, 8))
+    solver_name = "msat"
+    rounds = list(range(1, 3))
     results = []
-    number_of_repetitions = 4
+    number_of_repetitions = 2
     lea_primitives_and_rounds = combine_two_list(lea_primitives, rounds)
     for lea_primitive_and_round in lea_primitives_and_rounds:
         #results.append(pool.apply_async(run_experiment, args=(lea_primitive_and_round, number_of_repetitions, solver_name)))
         results.append(run_experiment(lea_primitive_and_round, number_of_repetitions, solver_name))
+    print(results)
