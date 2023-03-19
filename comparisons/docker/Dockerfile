@@ -48,6 +48,10 @@ RUN apt-get install -y software-properties-common
 RUN apt-add-repository -y ppa:rael-gc/rvm
 RUN apt-get update
 RUN apt-get install -y rvm
+ENV GUROBI_HOME="/gurobi/gurobi1000/linux64/"
+ENV PATH="$GUROBI_HOME/bin:$PATH"
+ENV GRB_LICENSE_FILE="/gurobi/gurobi.lic"
+ENV LD_LIBRARY_PATH="/gurobi/gurobi1000/linux64/lib:$LD_LIBRARY_PATH"
 
 WORKDIR "/home/sage/docker_claasp_white_paper_experiments"
 CMD ["/bin/bash"]
