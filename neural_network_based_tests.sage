@@ -46,7 +46,7 @@ def find_good_input_difference_for_neural_distinguisher(cipher, scenario = 'sing
         positions = [x == 'plaintext' for x in cipher_inputs]
     elif scenario == 'related-key':
         positions = [True for x in cipher_inputs]
-    differences, scores, highest_round = speck.find_good_input_difference_for_neural_distinguisher(difference_positions = positions)
+    differences, scores, highest_round = cipher.find_good_input_difference_for_neural_distinguisher(difference_positions = positions)
     print("The highest reached round for which a significant bias score was found was", highest_round)
     print("The best differences found by the optimizer are...")
     for i in range(1, 11):
