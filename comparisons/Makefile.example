@@ -1,6 +1,8 @@
 DOCKER_IMG_NAME=claasp_experiments
 CONTAINER_NAME=claasp_container
-CLAASP_LOCAL_PATH=/Users/mohamed/Desktop/TII_Code/tii-claasp
+
+CLAASP_LOCAL_PATH=/Users/TII/Desktop/TII_Code/tii-claasp # Change the path according to your local path of tii-claasp
+
 builddocker:
 	docker build  -f docker/Dockerfile -t $(DOCKER_IMG_NAME) docker/
 rundocker: builddocker

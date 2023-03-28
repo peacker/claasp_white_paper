@@ -19,7 +19,7 @@ setup( \n\
     author_email="adrian.ranea@kuleuven.be", \n\
     description="" \
 )' > /CASCADA/setup.py
-RUN sudo apt update && sudo apt install -y ruby-full && apt-get install -y task-spooler
+RUN sudo apt update && sudo apt install -y ruby-full && apt-get install -y task-spooler && apt-get install -y python3-matplotlib
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 RUN export PATH=$PATH:$HOME/.cargo/env && cd / && git clone https://gitlab.limos.fr/iia_lulibral/tagada.git && cd tagada && git checkout 1.0 && cd rust && /root/.cargo/bin/cargo build --release && cd /tagada && gem install bundler #&& bundle install
 RUN export PATH=$PATH:$HOME/.cargo/env && cd / && git clone https://gitlab.limos.fr/frdelobe/tagada_abstractor.git && cd tagada_abstractor && /root/.cargo/bin/cargo build --release
@@ -48,6 +48,17 @@ RUN apt-get install -y software-properties-common
 RUN apt-add-repository -y ppa:rael-gc/rvm
 RUN apt-get update
 RUN apt-get install -y rvm
+
+## Installing Matplotlib
+#RUN wget http://www.qhull.org/download/qhull-2020-src-8.0.2.tgz \
+#    && tar -xf rel-3.0.0.tar.gz \
+#    && rm rel-3.0.0.tar.gz
+#
+#RUN cd kissat-rel-3.0.0/ \
+#    && ./configure \
+#    && cd build/ \
+#    && make
+
 ENV GUROBI_HOME="/gurobi/gurobi1000/linux64/"
 ENV PATH="$GUROBI_HOME/bin:$PATH"
 ENV GRB_LICENSE_FILE="/gurobi/gurobi.lic"
