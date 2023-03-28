@@ -38,7 +38,7 @@ def run_evaluation(cipher, loop):
     return python_time, c_time, vectorize_time
 
 def run_evaluation_test(cipher, loop):
-    print(f"{cipher.family_name} & {cipher.}", end='')
+    print(f"{cipher.family_name} & ", end='')
     python_time_one, c_time_one, vectorize_time_one = run_evaluation(cipher, 1)
     python_time_loop, c_time_loop, vectorize_time_loop = run_evaluation(cipher, loop)
     print(
