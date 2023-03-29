@@ -35,7 +35,7 @@ from claasp.cipher_modules.models.utils import set_fixed_variables, integer_to_b
 import numpy as np
 
 def black_box_neural_network_test(cipher):
-    test_result = speck.neural_network_blackbox_distinguisher_tests()
+    test_result = cipher.neural_network_blackbox_distinguisher_tests()
     print(f'The test was run with the following parameters..\n{test_result["neural_network_blackbox_distinguisher_tests"]}')
     print(test_result['neural_network_blackbox_distinguisher_tests']['test_results'])
     return test_result
@@ -69,4 +69,4 @@ print("="*10,  "Training a neural distinguisher for SPECK32 ", "="*10)
 speck = load_speck3264()
 from claasp.cipher_modules.neural_network_tests import neural_staged_training
 diff_value_plain_key =  [best_difference, 0]
-neural_staged_training(speck, diff_value_plain_key, starting_round = 5)
+neural_staged_training(speck, diff_value_plain_key, starting_round = 5, training_samples=10**6, testing_samples=10**5)
