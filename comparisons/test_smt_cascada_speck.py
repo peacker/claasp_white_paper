@@ -7,7 +7,7 @@ import multiprocessing
 import time
 
 
-def run_experiment(speck_primitive_and_round_local, repetitions, solver_name):
+def run_experiment(speck_primitive_and_round_local, repetitions):
 
     speck_primitive = speck_primitive_and_round_local[0]
 
@@ -22,14 +22,14 @@ def run_experiment(speck_primitive_and_round_local, repetitions, solver_name):
     for i in range(repetitions):
         start_time = time.time()
         iterator = round_based_ch_search(
-            speck_instance, round, round, XorDiff, assert_type, solver_name,
+            speck_instance, round, round, XorDiff, assert_type, "btor",
             extra_chfinder_args={"exclude_zero_input_prop": True},
             extra_findnextchweight_args={"initial_weight": 0}
         )
         for (num_rounds, ch) in iterator:
             time_in_seconds = time.time() - start_time
             sum_in_sec += time_in_seconds
-            f.write(f"{{\"cipher_id\": \"{primitive_id}\",  \"library\": \"cascada\", \"number_rounds\": {num_rounds}, \"XorDiff\": \"{ch.srepr()}\", \"solver_name\": \"{solver_name}\", \"time\": {time_in_seconds}}}\n")
+            f.write(f"{{\"cipher_id\": \"{primitive_id}\",  \"library\": \"cascada\", \"number_rounds\": {num_rounds}, \"XorDiff\": \"{ch.srepr()}\", \"time\": {time_in_seconds}}}\n")
     #f.write(f"\nnumber_rounds: {num_rounds}, XorDiff: {ch.srepr()}, time: {sum_in_sec*1.0/repetitions}")
     f.close()
 
@@ -43,15 +43,15 @@ if __name__ == '__main__':
         speck.SpeckInstance.speck_64_96,
         speck.SpeckInstance.speck_64_128
     ]
-    solver_name = "msat"
-    rounds = list(range(4, 5))
+    rounds = list(range(1, 1))
     pool = Pool()
     results = []
     number_of_repetitions = 1
     speck_primitives_and_rounds = combine_two_list(speck_primitives, rounds)
     for speck_primitive_and_round in speck_primitives_and_rounds:
-        results.append(pool.apply_async(run_experiment, args=(speck_primitive_and_round, number_of_repetitions, solver_name)))
+        results.append(pool.apply_async(run_experiment, args=(speck_primitive_and_round, number_of_repetitions)))
     pool.close()
     pool.join()
     join_results = [result.get() for result in results]
     print(join_results)
+
