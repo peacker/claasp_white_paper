@@ -1,3 +1,9 @@
+############
+# This script plots the timings of the avalanche tests for five rounds of popular ciphers
+# shown in the figure 7 of the paper. We decided to illustrate this plot with 4 ciphers
+# unlike the one shown in the paper to make the script faster.
+############
+
 import matplotlib.pyplot as plt
 import time
 
