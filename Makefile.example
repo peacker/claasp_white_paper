@@ -1,8 +1,9 @@
 DOCKER_IMG_NAME=claasp_experiments
 CONTAINER_NAME=claasp_container
 CLAASP_LOCAL_PATH=/home/ubuntu/claasp/
+CLAASP_WHITE_PAPER_LOCAL_PATH=/home/ubuntu/claasp_white_paper
 builddocker:
-	cd /home/ubuntu/claasp && make rundocker && cd /home/ubuntu/claasp_white_paper
+	cd ${CLAASP_LOCAL_PATH} && make rundocker && cd ${CLAASP_WHITE_PAPER_LOCAL_PATH}
 	docker build  -f docker/Dockerfile -t $(DOCKER_IMG_NAME) docker/
 rundocker: builddocker
 	[ ! "$(docker ps -a | grep ${CONTAINER_NAME})" ] && docker rm -f ${CONTAINER_NAME} && \
