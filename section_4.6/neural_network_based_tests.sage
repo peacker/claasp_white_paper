@@ -32,6 +32,7 @@
 
 def load_speck3264(_number_of_rounds=22):
     from claasp.ciphers.block_ciphers.speck_block_cipher import SpeckBlockCipher
+    return SpeckBlockCipher(number_of_rounds = _number_of_rounds)
 
 from claasp.cipher_modules.models.utils import set_fixed_variables, integer_to_bit_list
 import numpy as np
