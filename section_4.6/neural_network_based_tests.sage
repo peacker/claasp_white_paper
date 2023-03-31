@@ -30,7 +30,9 @@
 #2000/2000 [==============================] - 273s 136ms/step - loss: 0.2512 - acc: 0.4999 - val_loss: 0.2512 - val_acc: 0.5001
 #Validation accuracy at 9 rounds :0.5001099705696106
 
-from util import *
+def load_speck3264(_number_of_rounds=22):
+    from claasp.ciphers.block_ciphers.speck_block_cipher import SpeckBlockCipher
+
 from claasp.cipher_modules.models.utils import set_fixed_variables, integer_to_bit_list
 import numpy as np
 
@@ -72,4 +74,5 @@ print("="*10,  "Training a neural distinguisher for SPECK32 ", "="*10)
 speck = load_speck3264()
 from claasp.cipher_modules.neural_network_tests import neural_staged_training
 diff_value_plain_key =  [best_difference, 0]
-neural_staged_training(speck, diff_value_plain_key, starting_round = 5, training_samples=10**6, testing_samples=10**5)
+# Note than in the current version, the neural network expects inputs of size 4*word_size
+neural_staged_training(speck, diff_value_plain_key, starting_round = 5, training_samples=10**6, testing_samples=10**5, word_size = 16)

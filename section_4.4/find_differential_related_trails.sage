@@ -12,9 +12,18 @@
 
 
 
+def load_speck3264(_number_of_rounds=22):
+    from claasp.ciphers.block_ciphers.speck_block_cipher import SpeckBlockCipher
+    return SpeckBlockCipher(number_of_rounds=_number_of_rounds)
 
+def load_hight(_number_of_rounds=22):
+     from claasp.ciphers.block_ciphers.hight_block_cipher import HightBlockCipher
+     return HightBlockCipher(number_of_rounds=_number_of_rounds, key_bit_size=128)
 
-from util import *
+def get_cipher_output_component_name(cipher):
+    last_component = cipher.get_all_components()[-1]
+    return last_component.id
+
 from claasp.cipher_modules.models.utils import set_fixed_variables, integer_to_bit_list
 import numpy as np
 
@@ -41,13 +50,21 @@ def find_optimal_differential_trail(cipher, scenario = "single-key", technique="
         from claasp.cipher_modules.models.cp.cp_models.cp_xor_differential_trail_search_model import CpXorDifferentialTrailSearchModel
         model = CpXorDifferentialTrailSearchModel(cipher)
     fixed_values = []
+    for i in range(2):
+        if cipher.inputs[i] == "key":
+            key_bits = cipher.inputs_bit_size[i]
+            key_pos = i
+        else:
+            plain_bits = cipher.inputs_bit_size[i]
+            plain_pos = i
+    fixed_values = []
     if scenario == "single-key":
-    # Fix the key difference to be zero, and the plaintext difference to be non-zero.
-        fixed_values.append(set_fixed_variables('key', 'equal', list(range(64)), integer_to_bit_list(0, 64, 'big')))
-        fixed_values.append(set_fixed_variables('plaintext', 'not_equal', list(range(32)), integer_to_bit_list(0, 32, 'big')))
+        # Fix the key difference to be zero, and the plaintext difference to be non-zero.
+        fixed_values.append(set_fixed_variables('key', 'equal', list(range(key_bits)), integer_to_bit_list(0, key_bits, 'big')))
+        fixed_values.append(set_fixed_variables('plaintext', 'not_equal', list(range(plain_bits)), integer_to_bit_list(0, plain_bits, 'big')))
     elif scenario == "related-key":
     # Fix the key difference to be non-zero
-        fixed_values.append(set_fixed_variables('key', 'not_equal', list(range(64)), integer_to_bit_list(0, 64, 'big')))
+        fixed_values.append(set_fixed_variables('key', 'not_equal', list(range(key_bits)), integer_to_bit_list(0, key_bits, 'big')))
     if solver is None:
         print(model.find_lowest_weight_xor_differential_trail(fixed_values))
     else:
@@ -65,15 +82,20 @@ def estimate_differential_probability(cipher, input_difference, output_differenc
         from claasp.cipher_modules.models.milp.milp_models.milp_xor_differential_model import MilpXorDifferentialModel
         model = MilpXorDifferentialModel(cipher)
     elif technique == "CP":
-        #from claasp.cipher_modules.models.minizinc.minizinc_models.minizinc_xor_differential_model import MinizincXorDifferentialModel
-        #model = MinizincXorDifferentialModel(cipher)
         from claasp.cipher_modules.models.cp.cp_models.cp_xor_differential_trail_search_model import CpXorDifferentialTrailSearchModel
         model = CpXorDifferentialTrailSearchModel(cipher)
     last_component_id = get_cipher_output_component_name(cipher)
+    for i in range(2):
+        if cipher.inputs[i] == "key":
+            key_bits = cipher.inputs_bit_size[i]
+            key_pos = i
+        else:
+            plain_bits = cipher.inputs_bit_size[i]
+            plain_pos = i
     fixed_values = []
-    fixed_values.append(set_fixed_variables('key', 'equal', list(range(64)), integer_to_bit_list(0, 64, 'big')))
-    fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(32)), integer_to_bit_list(input_difference, 32, 'big')))
-    fixed_values.append(set_fixed_variables('last_component_id', 'equal', list(range(32)), integer_to_bit_list(output_difference, 32, 'big')))
+    fixed_values.append(set_fixed_variables('key', 'equal', list(range(key_bits)), integer_to_bit_list(0, key_bits, 'big')))
+    fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(plain_bits)), integer_to_bit_list(input_difference, plain_bits, 'big')))
+    fixed_values.append(set_fixed_variables('last_component_id', 'equal', list(range(plain_bits)), integer_to_bit_list(output_difference, plain_bits, 'big')))
     if solver is None:
         solutions = model.find_all_xor_differential_trails_with_weight_at_most(min_weight, max_weight, fixed_values)
     else:
@@ -83,7 +105,9 @@ def estimate_differential_probability(cipher, input_difference, output_differenc
     print(f'{len(weights)} solutions found, with a final probability of 2^{sum_of_probs}')
     return(solutions)
 
-def find_impossible_differential_trail(cipher, scenario = "single-key", technique="CP", solver=None):
+
+
+def find_impossible_differential_trail(cipher, scenario = "single-key", technique="CP", solver="Chuffed"):
     assert technique in ["SAT", "SMT", "MILP", "CP"], 'technique must be "SAT",  "SMT", "MILP" or "CP"'
     if technique == "SAT":
         from claasp.cipher_modules.models.sat.sat_models.sat_xor_differential_model import SatXorDifferentialModel
@@ -95,45 +119,38 @@ def find_impossible_differential_trail(cipher, scenario = "single-key", techniqu
         from claasp.cipher_modules.models.milp.milp_models.milp_xor_differential_model import MilpXorDifferentialModel
         model = MilpXorDifferentialModel(cipher)
     elif technique == "CP":
-        #from claasp.cipher_modules.models.minizinc.minizinc_models.minizinc_xor_differential_model import MinizincXorDifferentialModel
-        #model = MinizincXorDifferentialModel(cipher)
         from claasp.cipher_modules.models.cp.cp_models.cp_xor_differential_trail_search_model import CpXorDifferentialTrailSearchModel
         model = CpXorDifferentialTrailSearchModel(cipher)
     # Extract cipher output component id
     last_component_id = get_cipher_output_component_name(cipher)
+    for i in range(2):
+        if cipher.inputs[i] == "key":
+            key_bits = cipher.inputs_bit_size[i]
+            key_pos = i
+        else:
+            plain_bits = cipher.inputs_bit_size[i]
+            plain_pos = i
     if scenario == "single-key":
         # Fix the key difference to be zero, and the plaintext difference to be non-zero.
-        for input_bit_position in range(32):
-            for output_bit_position in range(32):
+        for input_bit_position in range(plain_bits):
+            for output_bit_position in range(plain_bits):
                 fixed_values = []
-                fixed_values.append(set_fixed_variables('key', 'equal', list(range(64)), integer_to_bit_list(0, 64, 'big')))
-                fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(32)), integer_to_bit_list(1<<input_bit_position, 32, 'big')))
-                fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(32)), integer_to_bit_list(1<<output_bit_position, 32, 'big')))
-                if solver is None:
-                    solution = model.find_one_xor_differential_trail(fixed_values)
-                else:
-                    solution = model.find_one_xor_differential_trail(fixed_values, solver_name = solver)
+                fixed_values.append(set_fixed_variables('key', 'equal', list(range(key_bits)), integer_to_bit_list(0, key_bits, 'big')))
+                fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(plain_bits)), integer_to_bit_list(1<<input_bit_position, plain_bits, 'big')))
+                fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(plain_bits)), integer_to_bit_list(1<<output_bit_position, plain_bits, 'big')))
+                solution = model.find_one_xor_differential_trail(fixed_values)
                 if solution['status'] == "UNSATISFIABLE":
                     print(hex(1<<input_bit_position), " =\=> ", hex(output_bit_position), " is an impossible differential.")
     elif scenario == "related-key":
-        for input_bit_position in range(64+32):
-            for output_bit_position in range(32):
+        for input_bit_position in range(key_bits):
+            for output_bit_position in range(plain_bits):
                 fixed_values = []
-                if input_bit_position<32:
-                    fixed_values.append(set_fixed_variables('key', 'equal', list(range(64)), integer_to_bit_list(0, 64, 'big')))
-                    fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(32)), integer_to_bit_list(1<<input_bit_position, 32, 'big')))
-                else:
-                    fixed_values.append(set_fixed_variables('key', 'equal', list(range(64)), integer_to_bit_list(1<<(input_bit_position-32), 64, 'big')))
-                    fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(32)), integer_to_bit_list(0, 32, 'big')))
-                fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(32)), integer_to_bit_list(1<<output_bit_position, 32, 'big')))
-                if not solver is None:
-                    solution = model.find_one_xor_differential_trail(fixed_values)
-                else:
-                    solution = model.find_one_xor_differential_trail(fixed_values, solver_name = solver)
+                fixed_values.append(set_fixed_variables('key', 'equal', list(range(key_bits)), integer_to_bit_list(1<<(input_bit_position), key_bits, 'big')))
+                fixed_values.append(set_fixed_variables('plaintext', 'equal', list(range(plain_bits)), integer_to_bit_list(0, plain_bits, 'big')))
+                fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(plain_bits)), integer_to_bit_list(1<<output_bit_position, plain_bits, 'big')))
+                solution = model.find_one_xor_differential_trail(fixed_values)
                 if solution['status'] == "UNSATISFIABLE":
                     print(hex(1<<input_bit_position), " =\=> ", hex(output_bit_position), " is an impossible differential.")
-
-
 
 
 
@@ -165,3 +182,11 @@ print("="*10,  "Differential ", hex(input_difference), " to ", hex(output_differ
 speck = load_speck3264(_number_of_rounds = nr)
 # Search with SAT
 estimate_differential_probability(speck, input_difference = input_difference, output_difference = output_difference, min_weight=min_weight, max_weight = max_weight, technique = "SAT")
+
+
+
+#print("="*10,  "Impossible single-key differentials for 17 rounds HIGHT with SAT", "="*10)
+#speck = load_hight(_number_of_rounds = 17)
+# Search with SAT
+#find_impossible_differential_trail(speck, scenario = "single-key", technique = "SAT")
+
