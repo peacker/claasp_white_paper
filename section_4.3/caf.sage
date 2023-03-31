@@ -26,26 +26,26 @@ def caf_on_cipher(speck_args, number_of_rounds, cipher_filename, number_of_sampl
 
 
 input_and_sizes = {
-    #'speck_block_cipher': {
-    #    'params': {'block_bit_size': 128, 'key_bit_size': 128},
-    #    'number_of_rounds': 15,
-    #    'class_name': 'SpeckBlockCipher'
-    #},
+    'speck_block_cipher': {
+        'params': {'block_bit_size': 128, 'key_bit_size': 128},
+        'number_of_rounds': 3,
+        'class_name': 'SpeckBlockCipher'
+    },
     'aes_block_cipher': {
         'params': {'word_size': 8, 'state_size': 4},
-        'number_of_rounds': 4,
+        'number_of_rounds': 3,
         'class_name': 'AESBlockCipher'
     },
-    #'chacha_permutation': {
-    #    'params': {},
-    #    'number_of_rounds': 12,
-    #    'class_name': 'ChachaPermutation'
-    #},
-    #'ascon_permutation': {
-    #    'params': {},
-    #    'number_of_rounds': 5,
-    #    'class_name': 'AsconPermutation'
-    #}
+    'chacha_permutation': {
+        'params': {},
+        'number_of_rounds': 3,
+        'class_name': 'ChachaPermutation'
+    },
+    'ascon_permutation': {
+        'params': {},
+        'number_of_rounds': 3,
+        'class_name': 'AsconPermutation'
+    }
 }
 file = open('caf_results', 'a')
 for cipher_params_key in input_and_sizes:
@@ -81,12 +81,6 @@ for cipher_params_key in input_and_sizes:
 
             file.write(str(caf_cipher).replace("'", "\"")+"\n")
 file.close()
-
-# caf time x rounds 0.001 fixed number of samples = 1000
-
-
-# caf time x samples 0.001
-
 
 
 
