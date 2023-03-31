@@ -1,1 +1,0 @@
-solve::int_search([K_1_sub_rot_0, K_1_sub_rot_1, K_1_sub_rot_2, K_1_sub_rot_3, K_2_sub_rot_0, K_2_sub_rot_1, K_2_sub_rot_2, K_2_sub_rot_3, S_1_0_0, S_1_0_1, S_1_0_2, S_1_0_3, S_1_1_0, S_1_1_1, S_1_1_2, S_1_1_3, S_1_2_0, S_1_2_1, S_1_2_2, S_1_2_3, S_1_3_0, S_1_3_1, S_1_3_2, S_1_3_3], smallest, indomain_min, complete) minimize Obj;

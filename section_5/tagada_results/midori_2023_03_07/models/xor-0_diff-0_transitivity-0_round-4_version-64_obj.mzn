@@ -1,1 +1,0 @@
-constraint Obj = 2;
