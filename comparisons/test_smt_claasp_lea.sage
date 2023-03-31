@@ -25,21 +25,21 @@ def run_experiment(cipher_primitive, round, repetitions):
         if input_name == 'key':
             key_size = cipher_primitive.inputs_bit_size[input_names.index(input_name)]
             fixed_values.append(
-                M.set_fixed_variables(
+                set_fixed_variables(
                     'key',
                     'equal',
                     range(key_size),
-                    M.integer_to_bit_list(0, key_size, 'big')
+                    integer_to_bit_list(0, key_size, 'big')
                 )
             )
         else:
             plaintext_size = cipher_primitive.inputs_bit_size[input_names.index(input_name)]
             fixed_values.append(
-                M.set_fixed_variables(
+                set_fixed_variables(
                     'plaintext',
                     'not_equal',
                     range(plaintext_size),
-                    M.integer_to_bit_list(0, plaintext_size, 'big')
+                    integer_to_bit_list(0, plaintext_size, 'big')
                 )
             )
 
