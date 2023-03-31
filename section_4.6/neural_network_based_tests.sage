@@ -37,7 +37,10 @@ import numpy as np
 def black_box_neural_network_test(cipher):
     test_result = cipher.neural_network_blackbox_distinguisher_tests()
     print(f'The test was run with the following parameters..\n{test_result["neural_network_blackbox_distinguisher_tests"]}')
-    print(test_result['neural_network_blackbox_distinguisher_tests']['test_results'])
+    print(f'When the input of the neural network was the plaintext (and the key was fixed), the following accuracies were obtained for each output: \n')
+    print(test_result['neural_network_blackbox_distinguisher_tests']['test_results']['plaintext'])
+    print(f'When the input of the neural network was the key (and the plaintext was fixed), the following accuracies were obtained for each output: \n')
+    print(test_result['neural_network_blackbox_distinguisher_tests']['test_results']['key'])
     return test_result
 
 def find_good_input_difference_for_neural_distinguisher(cipher, scenario = 'single-key'):
