@@ -1,7 +1,8 @@
+# This code run a NIST STS tests for the provided primitives
 # Please run under the root directory
 
 # This import the NIST STS class from statistical_tests module
-# For dieharder, please import the DieharderTests as StatisticalTests from claasp.cipher_modules.statistical_tests.dieharder_statistical_tests
+# For dDeharder, please import the DieharderTests as StatisticalTests from claasp.cipher_modules.statistical_tests.dieharder_statistical_tests
 from claasp.cipher_modules.statistical_tests.nist_statistical_tests import StatisticalTests as StatisticalTests
 import math
 
