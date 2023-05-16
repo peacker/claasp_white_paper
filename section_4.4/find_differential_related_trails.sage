@@ -140,7 +140,7 @@ def find_impossible_differential_trail(cipher, scenario = "single-key", techniqu
                 fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(plain_bits)), integer_to_bit_list(1<<output_bit_position, plain_bits, 'big')))
                 solution = model.find_one_xor_differential_trail(fixed_values)
                 if solution['status'] == "UNSATISFIABLE":
-                    print(hex(1<<input_bit_position), " =\=> ", hex(output_bit_position), " is an impossible differential.")
+                    print(hex(1<<input_bit_position), " =\=> ", hex(1<<output_bit_position), " is an impossible differential.")
     elif scenario == "related-key":
         for input_bit_position in range(key_bits):
             for output_bit_position in range(plain_bits):
@@ -150,7 +150,7 @@ def find_impossible_differential_trail(cipher, scenario = "single-key", techniqu
                 fixed_values.append(set_fixed_variables(last_component_id, 'equal', list(range(plain_bits)), integer_to_bit_list(1<<output_bit_position, plain_bits, 'big')))
                 solution = model.find_one_xor_differential_trail(fixed_values)
                 if solution['status'] == "UNSATISFIABLE":
-                    print(hex(1<<input_bit_position), " =\=> ", hex(output_bit_position), " is an impossible differential.")
+                    print(hex(1<<input_bit_position), " =\=> ", hex(1<<output_bit_position), " is an impossible differential.")
 
 
 
@@ -167,7 +167,7 @@ speck = load_speck3264(_number_of_rounds = 5)
 find_optimal_differential_trail(speck, scenario = "related-key", technique = "CP", solver="chuffed")
 
 print("="*10,  "Impossible single-key differentials for 6 rounds SPECK with Kissat", "="*10)
-# Obtain a 5-round instance of Speck3264
+# Obtain a 6-round instance of Speck3264
 speck = load_speck3264(_number_of_rounds = 6)
 # Search with SAT
 find_impossible_differential_trail(speck, scenario = "single-key", technique = "SAT", solver='kissat')
@@ -185,8 +185,8 @@ estimate_differential_probability(speck, input_difference = input_difference, ou
 
 
 
-#print("="*10,  "Impossible single-key differentials for 17 rounds HIGHT with SAT", "="*10)
-#speck = load_hight(_number_of_rounds = 17)
+# print("="*10,  "Impossible single-key differentials for 17 rounds HIGHT with SAT", "="*10)
+# hight = load_hight(_number_of_rounds = 17)
 # Search with SAT
-#find_impossible_differential_trail(speck, scenario = "single-key", technique = "SAT")
+# find_impossible_differential_trail(hight, scenario = "single-key", technique = "SAT")
 
