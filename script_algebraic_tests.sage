@@ -6,4 +6,3 @@ ps=AlgebraicModel(present).polynomial_system()
 print(ps)
 result=algebraic_tests(present,120)
 print(result)
-
