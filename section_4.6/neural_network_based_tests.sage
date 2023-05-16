@@ -1,3 +1,11 @@
+# These functions mentioned in section 4.6 are illustrated in this script (neural_network_based_tests.sage)
+# This script first runs the black box test on
+# 1 round of Speck64, then runs the input difference search for Speck64, and trains
+# Gohr’s neural network using the optimal difference returned by the optimizer.
+# Note that the optimizer is not deterministic, and its parameters are adapted for
+# a reasonably fast execution time for demonstration purposes; therefore, it may,
+# in some rare instance, fail to find the optimal input difference 0x00400000.
+
 #Example output:
 #========== Running the black-box neural test on 1-round SPECK32  ==========
 #2023-03-22 13:07:32.621086: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
