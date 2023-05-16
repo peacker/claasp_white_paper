@@ -1,9 +1,12 @@
-# please run under the root directory
-from claasp.cipher_modules.statistical_tests.nist_statistical_tests import StatisticalTests
+# Please run under the root directory
+
+# This import the NIST STS class from statistical_tests module
+# For dieharder, please import the DieharderTests as StatisticalTests from claasp.cipher_modules.statistical_tests.dieharder_statistical_tests
+from claasp.cipher_modules.statistical_tests.nist_statistical_tests import StatisticalTests as StatisticalTests
 import math
 
 CIPHERS = [
-    # example of the list to run the test
+    # list of primitives parameters to run the test
     # block_ciphers
     {"cipher_name": "claasp.ciphers.block_ciphers.skinny_block_cipher.SkinnyBlockCipher",
      "parameters": {'block_bit_size': 128, 'key_bit_size': 384, 'number_of_rounds': 40}},
@@ -80,7 +83,7 @@ def get_class(class_string):
 
 def run_statistical_test(sts):
     for i in range(len(sts.cipher.inputs)):
-        # run avalanche
+        # run avalanche dataset
         seq_size = 1048576
         seq_lines = 384
         sample_size = sts.cipher.inputs_bit_size[i] * sts.cipher.output_bit_size
@@ -89,7 +92,7 @@ def run_statistical_test(sts):
                                                number_of_samples_in_one_line=number_of_samples_in_one_line,
                                                number_of_lines=seq_lines)
 
-        # run correlation
+        # run correlation dataset
         seq_size = 1040384
         seq_lines = 128
         if sts.cipher.inputs_bit_size[i] == sts.cipher.output_bit_size:
@@ -100,7 +103,7 @@ def run_statistical_test(sts):
                                                      number_of_lines=seq_lines,
                                                      number_of_blocks_in_one_sample=number_of_blocks_in_one_sample)
 
-        # # run CBC
+        # # run CBC dataset
         seq_size = 1048576
         seq_lines = 300
         if len(sts.cipher.inputs) > 1 and sts.cipher.inputs_bit_size[i] == sts.cipher.output_bit_size:
@@ -111,7 +114,7 @@ def run_statistical_test(sts):
                                              number_of_lines=seq_lines,
                                              number_of_blocks_in_one_sample=number_of_blocks_in_one_sample)
 
-        # run random
+        # run random dataset
         seq_size = 1040384
         seq_lines = 128
         number_of_samples_in_one_line = 1
@@ -121,7 +124,7 @@ def run_statistical_test(sts):
                                             number_of_lines=seq_lines,
                                             number_of_blocks_in_one_sample=number_of_blocks_in_one_sample)
 
-        # run low_density and high_density
+        # run low_density and high_density dataset
         if len(sts.cipher.inputs) > 1:
             number_of_samples_in_one_line = 1
             seq_size = 1056896
@@ -140,10 +143,13 @@ def run_statistical_test(sts):
                                                       number_of_lines=seq_lines,
                                                       ratio=ratio)
 
+# read parameters from the list
 for cipher in CIPHERS:
     cipher_name = cipher["cipher_name"]
     cipher_creator = get_class(cipher_name)
     cipher_parameters = cipher["parameters"]
+    # create a cipher instance according to the parameters
     cipher_instance = cipher_creator(**cipher_parameters)
+    # base on the cipher instance, create its statistical tests analysis instance
     sts = StatisticalTests(cipher)
     run_statistical_test(sts)
