@@ -7,3 +7,8 @@ speck_cipher = SpeckBlockCipher(number_of_rounds=9, block_bit_size=128, key_bit_
 caf = speck_cipher.continuous_avalanche_factor(0.001, 10000)
 print(caf['plaintext']['cipher_output']['continuous_avalanche_factor']['values'][0]['value'])
 0.067
+
+# caf['plaintext']['cipher\_output']['continuous\_avalanche\_factor']
+# is an array of dictionaries, where index 0 contains the CAF for \speck[128]{128} reduced to 1 round,
+# index 1 contains the CAF for Speck128/128 reduced to 2 rounds, and so on.
+# In this case, we obtained a value of 0.067 for CAF at round 8.
