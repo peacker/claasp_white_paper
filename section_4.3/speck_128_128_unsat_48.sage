@@ -15,3 +15,4 @@ key = set_fixed_variables(
     bit_values=(0,) * 128)
 sat.build_xor_differential_trail_model(48, fixed_variables=[plaintext, key])
 print(sat._solve_with_external_sat_solver("xor_differential", "parkissat", ["-c=125"]))
+# expected output {'cipher_id': 'speck_p128_k128_o128_r10', 'model_type': 'xor_differential', 'solver_name': 'parkissat', 'solving_time_seconds': 326337.9086048603, 'memory_megabytes': 0, 'components_values': {}, 'total_weight': None, 'status': 'UNSATISFIABLE'}
